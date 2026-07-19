@@ -53,7 +53,7 @@ pythondef load_events(spark, path):
 
 ## 3. Scale-up — 10x larger, hourly instead of daily
 
-1.Move off manual batch overwrites onto true incremental ingestion (Auto Loader + streaming with trigger(availableNow=True) or continuous, checkpointed.
+1. Move off manual batch overwrites onto true incremental ingestion (Auto Loader + streaming with trigger(availableNow=True) or continuous, checkpointed.
 2. The current mode("overwrite") approach recomputes silver from scratch each time — fine at low volume, but at hourly cadence and 10x size, this needs to become a proper MERGE-based upsert.
 3. At hourly/10x scale, you need automated checks — this is exactly where the run_dq_checks utility stops being a nice-to-have and becomes a required gate wired into the job, failing loudly (and alerting) rather than silently producing a bad dashboard.
 4. Reconsider the gold-layer aggregation grain and refresh strategy. Daily aggregates recomputed hourly are wasteful if most of the day's data hasn't changed. I'd move toward incrementally updating only the current day's (or current hour's) aggregate partition, rather than recomputing the full daily rollup on every run.
